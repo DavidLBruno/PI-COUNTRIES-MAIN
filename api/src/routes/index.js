@@ -30,35 +30,51 @@ const getApiInfo = async () => {
     }
 };
 
+const getDbInfo = async ()=>{
+    return await Country.findAll({
+        attributes: ['id', 'name', 'continent', 'population', 'img'],
+        include:{
+            model: Activity,
+            attributes: ['name'],
+            through:{
+                attributes: []
+            }
+        }
+    })
+}
+
 //Si no recibe name devuelve todos los paises (Tambien si los paises no estan en la DataBase los crea)
 router.get('/countries', async (req, res, next) => {
     try {
         if(!req.query.name){
-            let countries = await getApiInfo()
-            countries.forEach(e => {
-                Country.findOrCreate({
-                    where: {
-                        id: e.id,
-                        name: e.name,
-                        img: e.img,
-                        continent: e.continent,
-                        capital: e.capital,
-                        subregion: e.subregion,
-                        area: e.area,
-                        population: e.population
-                }
-            })
-        })
-        const allCountries = await Country.findAll({
-            include: Activity
-        })
-        res.send(allCountries)
+
+            let dbInfo = await getDbInfo();
+            if(dbInfo.length){
+                res.send(dbInfo)
+            }else{
+                let countries = await getApiInfo()
+                countries.forEach(e => {
+                    Country.findOrCreate({
+                        where: {
+                            id: e.id,
+                            name: e.name,
+                            img: e.img,
+                            continent: e.continent,
+                            capital: e.capital,
+                            subregion: e.subregion,
+                            area: e.area,
+                            population: e.population
+                        }
+                    })
+                })
+                dbInfo = await getDbInfo();
+                res.send(dbInfo)
+        }
+
         }else if(req.query.name){
-            const {name} = req.query;
-            const allCountries2 = await Country.findAll({
-                include: Activity
-            })
-            const country = allCountries2.filter(country => country.name.toLowerCase().includes(name.toLowerCase()))
+            const { name } = req.query;
+            let allCountries = await getDbInfo();
+            const country = allCountries.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
             country.length ? res.send(country) : res.send('Country not found')
         }else{
             next()
