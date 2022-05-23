@@ -3,7 +3,7 @@ const { Router } = require('express');
 // Ejemplo: const authRouter = require('./auth.js');
 const axios = require ('axios');
 const { Activity, Country } = require ('../db')
-
+const { Op } = require('sequelize');
 
 const router = Router();
 
@@ -44,7 +44,7 @@ const getDbInfo = async ()=>{
 }
 
 //Si no recibe name devuelve todos los paises (Tambien si los paises no estan en la DataBase los crea)
-router.get('/countries', async (req, res, next) => {
+router.get('/countries', async (req, res) => {
     try {
         if(!req.query.name){
 
@@ -70,14 +70,11 @@ router.get('/countries', async (req, res, next) => {
                 dbInfo = await getDbInfo();
                 res.send(dbInfo)
         }
-
-        }else if(req.query.name){
+    }else{
             const { name } = req.query;
             let allCountries = await getDbInfo();
             const country = allCountries.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
-            country.length ? res.send(country) : res.send('Country not found')
-        }else{
-            next()
+            return res.send(country);
         }
     } catch(error) {
         res.send(error)
@@ -98,25 +95,23 @@ router.get('/countries/:id', async (req, res) => {
 })
 
 router.post('/activity', async (req, res) => {
-    try{
-        const { name, difficulty, duration, season, country } = req.body;
-        const newActivity = await Activity.create({
-            name,
-            difficulty,
-            duration,
-            season,
-            country
-        })
-        let activityCountry = await Country.findAll({
-            where: { name: country }
-        })
-        activityCountry.forEach(e => {
-            newActivity.addCountry(country)
-        })
-        res.send('Activity created successfully')
-    }catch(error){
-        res.send(error)
-    }
+    console.log(req)
+    const { name, difficulty, duration, season, country } = req.body
+    const createActivity = await Activity.create({
+        name,
+        difficulty,
+        duration,
+        season,
+    });
+    const dbCountry= await Country.findAll({
+        where: {
+            id: {
+                [Op.in]: Array.isArray(country) ? country : [country]
+            }
+        }
+    });
+    await createActivity.setCountries(dbCountry);
+    res.send('Funciono')
 })
 
 module.exports = router;
