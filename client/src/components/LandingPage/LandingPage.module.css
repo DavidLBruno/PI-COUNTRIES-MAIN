@@ -25,3 +25,9 @@
     background-color: white;
     color: black;
 }
+
+.form{
+    display: flex;
+    background-color: rgb(255, 255, 255);
+}
+

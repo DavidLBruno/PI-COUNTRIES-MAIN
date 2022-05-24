@@ -1,4 +1,4 @@
-const initialState ={
+const initialState = {
     countries : [],
     allCountries: [],
     activities : [],
@@ -77,13 +77,13 @@ function rootReducer(state = initialState, action){
                 ...state,
                 detail: action.payload
             }
-            case 'FILTER_BY_ACTIVITY':
-                return{
-                    ...state,
-                    countries: state.countries.filter((c) => {
-                        return c.activities?.some((a) => a.name === action.payload)
-                    })
-                }
+        case 'FILTER_BY_ACTIVITY':
+            return{
+                ...state,
+                countries: state.countries.filter((c) => {
+                    return c.activities?.some((a) => a.name === action.payload)
+                })
+            }
             default:
                 return state;
     }

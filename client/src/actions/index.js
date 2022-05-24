@@ -77,5 +77,6 @@ export function filterByActivity(payload){
         type: 'FILTER_BY_ACTIVITY',
         payload
     }
-}
+};
+
 

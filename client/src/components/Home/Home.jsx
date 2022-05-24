@@ -29,6 +29,10 @@ export default function Home(){
         dispatch(getCountries());
     }, [])
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [allCountries]);
+
     function handleClick(){
         dispatch(getCountries())
     };

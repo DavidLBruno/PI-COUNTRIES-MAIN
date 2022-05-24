@@ -6,7 +6,7 @@
     position: absolute;
 }
 
-.home{
+.nav{
     display: flex;
     background-color: rgba(0, 0, 0, 0.5);
     height: 100px;
@@ -18,58 +18,45 @@
     top: 0px;
 }
 
-.title{
+.information{
     display: flex;
+    justify-content: space-around;
+    padding-top: 150px;
+}
+
+.infoCard{
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
     color: white;
-    background-color: black;
-    height: 50px;
-    width: 150px;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
-.cards{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    justify-content: space-between;
-    align-content: space-between;
-    gap: 1rem;
-    margin-left: 5%;
-    margin-bottom: 0px;
-    margin-top: 20px;
-}
-
-.btnActivity{
+.btn {
     background-color: black;
-    height: 50px;
-    width: 200px;
     opacity: 0.9;
     color: white;
+    padding: 20px 40px;
     font-size: 25px;
     border-radius: 5px;
     -webkit-transition-duration: 0.9s;
     transition-duration: 0.9s;
     cursor: pointer;
 }
-.btnActivity:hover{
+
+.btn:hover {
     background-color: white;
     color: black;
 }
 
-.paginated{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 40px;
+.title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: white;
+    font-size: 25px;
+    background-color: black;
+    height: 60px;
+    width: 130px;
+    border-radius: 5px;
+    cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
 
